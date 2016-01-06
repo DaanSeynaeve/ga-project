@@ -13,6 +13,9 @@
 % PR_CROSS: probability for crossover
 % PR_MUT: probability for mutation
 % CROSSOVER: the crossover operator
+% SUBPOP: No. of subpopulations
+% MIGR: Migration rate
+% MIGGEN: No. of gens / migration
 % ah1, ah2, ah3: axes handles to visualise tsp
 %
 % returns: best-, mean- and worst-fitness w.r.t. gen
@@ -20,6 +23,7 @@
 function [best,mean_fits,worst] = run_ga_adapted(...
     x, y, REP, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, ...
     PR_CROSS, PR_MUT, CROSSOVER, MUTATION, LOCALLOOP, ...
+    SUBPOP, MIGR, MIGGEN, ...
     ah1, ah2, ah3)
 
     GGAP = 1 - ELITIST;
@@ -78,34 +82,40 @@ function [best,mean_fits,worst] = run_ga_adapted(...
         % assign fitness values to entire population
         FitnV=ranking(ObjV);
         % select individuals for breeding
-        SelCh=select('sus', Chrom, FitnV, GGAP);
+        SelCh=select('sus', Chrom, FitnV, GGAP, SUBPOP);
 
         if strcmp(REP,'path') % path representation
             % recombine individuals (crossover)
-            SelCh = recombin_path(CROSSOVER,SelCh,PR_CROSS,Dist);
+            SelCh = recombin_path(CROSSOVER,SelCh,PR_CROSS,Dist,SUBPOP);
             SelCh = mutateTSP_path(MUTATION,SelCh,PR_MUT);
 
             %evaluate offspring, call objective function
             ObjVSel = tspfun_path(SelCh,Dist);
 
             %reinsert offspring into population
-            [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
+            [Chrom, ObjV]=reins(Chrom,SelCh,SUBPOP,1,ObjV,ObjVSel);
 
             Chrom = tsp_ImprovePopulation_path(NIND, NVAR, Chrom,LOCALLOOP,Dist);
         else % adjacency representation
             % recombine individuals (crossover)
-            SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
+            SelCh = recombin(CROSSOVER,SelCh,PR_CROSS,SUBPOP);
             SelCh = mutateTSP('inversion',SelCh,PR_MUT);
 
             %evaluate offspring, call objective function
             ObjVSel = tspfun(SelCh,Dist);
 
             %reinsert offspring into population
-            [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
+            [Chrom, ObjV]=reins(Chrom,SelCh,SUBPOP,1,ObjV,ObjVSel);
 
             Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
         end
+        
         %increment generation counter
-        gen=gen+1;            
+        gen=gen+1;
+        
+        % Migrate individuals between subpopulations
+        if (rem(gen,MIGGEN) == 0)
+            [Chrom, ObjV] = migrate(Chrom, SUBPOP, [MIGR, 1, 1], ObjV);
+        end
     end
 end

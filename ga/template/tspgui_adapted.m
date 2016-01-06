@@ -16,6 +16,9 @@ PR_MUT=.05;       % probability of mutation
 LOCALLOOP=0;      % local loop removal
 CROSSOVER = 'scx';  % default crossover operator
 MUTATION = 'scramble'; % default mutation operator
+SUBPOP = 5; % No. of subpopulations
+MIGR = 0.2; % Migration rate
+MIGGEN = 20; % No. of gens / migration
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % read an existing population
@@ -189,7 +192,7 @@ set(fh,'Visible','on');
         set(mutslider,'Visible','off');
         set(crossslider,'Visible','off');
         set(elitslider,'Visible','off');
-        run_ga_adapted(x, y, REP, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, MUTATION, LOCALLOOP, ah1, ah2, ah3);
+        run_ga_adapted(x, y, REP, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, MUTATION, LOCALLOOP, SUBPOP, MIGR, MIGGEN, ah1, ah2, ah3);
         end_run();
     end
     function inputbutton_Callback(hObject,eventdata)
