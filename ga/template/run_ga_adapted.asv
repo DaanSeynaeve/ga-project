@@ -23,10 +23,10 @@ function [best,mean_fits,worst] = run_ga_adapted(...
     ah1, ah2, ah3)
 
     GGAP = 1 - ELITIST;
-    stopN=ceil(STOP_PERCENTAGE*NIND);
     mean_fits=zeros(1,MAXGEN+1);
     worst=zeros(1,MAXGEN+1);
     best=zeros(1,MAXGEN);
+    gen=0;
     
     % distance matrix
     Dist=zeros(NVAR,NVAR);
@@ -38,20 +38,25 @@ function [best,mean_fits,worst] = run_ga_adapted(...
     
     % initialize population
     Chrom=zeros(NIND,NVAR);
-    if strcmp(REP,'path');
-        for row=1:NIND
+    for row=1:NIND
+        if strcmp(REP,'path');
             Chrom(row,:)=path2adj(randperm(NVAR));
+        else
+            Chrom(row,:)=randperm(NVAR);
         end
+    end
+    
+    
+    stopN=ceil(STOP_PERCENTAGE*NIND); % nb of individuals of equal fitness needed to stop
+    
+    % evaluate initial population
+    if strcmp(REP,'path')
         ObjV = tspfun_path(Chrom,Dist);
     else
-        for row=1:NIND
-        Chrom(row,:)=randperm(NVAR);
-        end
         ObjV = tspfun(Chrom,Dist);
     end
     
     % generational loop
-    gen = 0;
     while gen<MAXGEN
         sObjV=sort(ObjV);
         best(gen+1)=min(ObjV);
@@ -75,9 +80,9 @@ function [best,mean_fits,worst] = run_ga_adapted(...
               break;
         end
         
-        % assign fitness values to entire population
+        %assign fitness values to entire population
         FitnV=ranking(ObjV);
-        % select individuals for breeding
+        %select individuals for breeding
         SelCh=select('sus', Chrom, FitnV, GGAP);
 
         if strcmp(REP,'path') % path representation

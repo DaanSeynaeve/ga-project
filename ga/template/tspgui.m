@@ -1,5 +1,6 @@
 function tspgui()
 
+addpath(genpath('.'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 NIND=50;		% Number of individuals
@@ -45,7 +46,7 @@ CROSSOVER = 'xalt_edges';  % default crossover operator
 %end
 
 % load the data sets
-datasetslist = dir('datasets/');datasetslist = dir('datasets/');
+datasetslist = dir('template/datasets/');
 datasets=cell( size(datasetslist,1)-2,1);datasets=cell( size(datasetslist,1)-2 ,1);
 for i=1:size(datasets,1);
     datasets{i} = datasetslist(i+2).name;

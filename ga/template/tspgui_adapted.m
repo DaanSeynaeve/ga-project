@@ -1,7 +1,9 @@
 function tspgui_adapted()
 
+addpath(genpath('.'))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+REP = 'path';   % representation to use
 NIND=50;		% Number of individuals
 MAXGEN=100;		% Maximum no. of generations
 NVAR=26;		% No. of variables
@@ -46,7 +48,8 @@ MUTATION = 'scramble'; % default mutation operator
 %end
 
 % load the data sets
-datasetslist = dir('datasets/');datasetslist = dir('datasets/');
+test = 'template/datasets/';
+datasetslist = dir(test);
 datasets=cell( size(datasetslist,1)-2,1);datasets=cell( size(datasetslist,1)-2 ,1);
 for i=1:size(datasets,1);
     datasets{i} = datasetslist(i+2).name;
@@ -186,7 +189,7 @@ set(fh,'Visible','on');
         set(mutslider,'Visible','off');
         set(crossslider,'Visible','off');
         set(elitslider,'Visible','off');
-        run_ga_adapted(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, MUTATION, LOCALLOOP, ah1, ah2, ah3);
+        run_ga_adapted(x, y, REP, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, MUTATION, LOCALLOOP, ah1, ah2, ah3);
         end_run();
     end
     function inputbutton_Callback(hObject,eventdata)

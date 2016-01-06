@@ -7,8 +7,8 @@
 \usepackage[titletoc,title]{appendix}
 %\usepackage{cite}
 %\usepackage{booktabs}
-%\usepackage{epstopdf}
-%\usepackage{graphicx}
+\usepackage{graphicx}
+\usepackage{epstopdf}
 %\usepackage{caption}
 %\usepackage{subcaption}
 %\usepackage{dsfont}
@@ -105,9 +105,24 @@ crossover increasingly important for larger problem instances?
 
 Some operators: \ref{code:cycle_cross} and \ref{code:scx}
 
+\begin{figure}
+\centering
+\includegraphics[width=.5\textwidth]{img/rondrit127-pathvs-inv-50-100-20mut-noloop.eps}
+\caption{Comparison of path representation crossover operators on the rondrit127 dataset (50 individuals, 95\% crossover, 20\% inversion mutation, no local loop optimization)}
+\end{figure}
+
 \section{Optional Task}
 
 \section{Benchmark Performance}
+
+\subsection{rbx711}
+
+\begin{figure}
+\centering
+\includegraphics[width=.5\textwidth]{img/rbx711-scx-inv-100-100-35mut-loop.eps}
+\caption{rbx711 benchmark: result of 100 generations with a population size of 100 using SCX crossover (95\%) with inversion mutation (35\%).}
+\end{figure}
+
 
 % % % appendices % % %
 \newpage
@@ -123,9 +138,15 @@ Some operators: \ref{code:cycle_cross} and \ref{code:scx}
 \begin{appendices}
 \section{Code}
 \subsection{scx.m}\label{code:scx}
-	\lstinputlisting{../ga/template/scx.m}
+	\lstinputlisting{../ga/template/crossovers/scx.m}
+\subsection{pmx.m}\label{code:pmx}
+	\lstinputlisting{../ga/template/crossovers/pmx.m}
 \subsection{cycle\_cross.m}\label{code:cycle_cross}
-	\lstinputlisting{../ga/template/cycle_cross.m}
+	\lstinputlisting{../ga/template/crossovers/cycle_cross.m}
+\subsection{order\_cross.m}\label{code:order_cross}
+	\lstinputlisting{../ga/template/crossovers/order_cross.m}
+\subsection{run\_ga\_adapted.m}\label{code:run_ga}
+	\lstinputlisting{../ga/template/run_ga_adapted.m}
 \end{appendices}
 \restoregeometry
 
